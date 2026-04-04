@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
-import User from "../models/User";
+import User from "../models/User.js";
+import generateToken from "../lib/utils.js";
 
 export const signup = async (req, res) => {
   const { fullname, email, password } = req.body;
@@ -20,7 +21,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "Enter valid email" });
     }
 
-    const user = User.findOne({ email });
+    const user = await User.findOne({email});
     if (user) return res.status(400).json({ message: "This email already exists" });
 
     const salt = await bcrypt.genSalt(10);
@@ -32,8 +33,26 @@ export const signup = async (req, res) => {
       password: hashedPassword,
     });
 
+    if(newUser){
+      // generateToken(newUser._id,res);
+      // await newUser.save();
+
+      // Persist user first and then issue cookie
+      const savedUser = await newUser.save();
+      generateToken(savedUser._id,res);
+
+      res.status(201).json({
+        _id: newUser._id,
+        fullname: newUser.fullname,
+        email: newUser.email,
+        profilePic: newUser.profilePic,
+      })
+    } else {
+      res.status(400).json({ message: "Invalid user data"})
+    }
     
-
-
-  } catch (error) {}
+  } catch (error) {
+    console.log("Error in signup controller");
+    res.status(500).json({message: "Interval server error"})
+  }
 };
