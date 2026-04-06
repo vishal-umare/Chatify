@@ -1,16 +1,17 @@
 import express from "express"
 import { signup, login, logout, updateProfile } from "../controllers/authController.js";
 import { protectRoute } from "../middlewares/auth.middleware.js";
+import { arcjectProtection } from "../middlewares/arcjet.middleware.js";
 const router = express.Router();
 
-router.post("/signup", signup);
+router.post("/signup",arcjectProtection , signup);
 
-router.post("/login", login);
+router.post("/login", arcjectProtection ,login);
 
-router.post("/logout", logout);
+router.post("/logout",arcjectProtection, logout);
 
-router.put("/update-profile", protectRoute, updateProfile);
+router.put("/update-profile",arcjectProtection ,  protectRoute, updateProfile);
 
-router.get("/check", protectRoute, (req,res) => res.status(200).json(req.user));
+router.get("/check",arcjectProtection , protectRoute, (req,res) => res.status(200).json(req.user));
 
 export default router;
