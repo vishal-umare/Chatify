@@ -14,6 +14,11 @@ function LoginPage() {
     login(formData);
   }
 
+  // Demo login handler
+const handleDemoLogin = () => {
+  setFormData({ email: "demo@chatify.com", password: "demo1234" });
+}
+
 
   return (
     <div className='w-full flex items-center justify-center p-4 bg-slate-900 '>
@@ -71,7 +76,27 @@ function LoginPage() {
                   </button>
                 </form>
 
-                <div className="mt-6 text-center">
+                {/* DIVIDER */}
+                <div className="flex items-center my-4 gap-3">
+                  <div className="flex-1 h-px bg-slate-600/40" />
+                  <span className="text-slate-500 text-sm">or</span>
+                  <div className="flex-1 h-px bg-slate-600/40" />
+                </div>
+
+                {/* DEMO BUTTON */}
+                <button
+                  type="button"
+                  onClick={handleDemoLogin}
+                  disabled={isLoggingUp}
+                  className="w-full py-2.5 rounded-lg border border-cyan-500/40 text-cyan-400 text-sm font-medium hover:bg-cyan-500/10 transition-colors duration-200"
+                >
+                  👀 Try Demo Account
+                </button>
+                <p className="text-center text-xs text-slate-500 mt-2">
+                  No signup needed — explore the app instantly
+                </p>
+
+                <div className="mt-4 text-center">
                   <Link to="/signup" className="auth-link">
                     Don't have an account? SignUp
                   </Link>
